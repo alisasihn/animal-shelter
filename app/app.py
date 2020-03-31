@@ -2,93 +2,133 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 
-from src.outcome import string_map
+from src.outcome import string_map, predict_input_outcome
 
-app = dash.Dash()
+app = dash.Dash(__name__)
+server = app.server
 
-prediction_altered = [string_map[1].keys()]
-prediction_sex = [string_map[2].keys()]
-prediction_animal_type = [string_map[4].keys()]
-prediction_color = [string_map[5].keys()]
-prediction_breed = [string_map[7].keys()]
-prediction_intake_condition = [string_map[8].keys()]
+prediction_altered = list(string_map[1].keys())
+prediction_sex = list(string_map[2].keys())
+prediction_animal_type = list(string_map[4].keys())
+prediction_color = list(string_map[5].keys())
+prediction_month = list([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+prediction_breed = list(string_map[7].keys())
+prediction_intake_condition = list(string_map[8].keys())
 
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
+app.layout = html.Div([
+    html.H1('Animal Shelter'),
 
-    html.Div(children='''
-    Dash: A web app framework for Python.
-    '''),
+    html.Div([
+        html.H2('Predict Outcome'),
+        html.Div([
+            html.Div([
+                html.Label(
+                    [
+                        'Spayed/Neutered/Intact',
+                        dcc.Dropdown(
+                            id='altered-input',
+                            options=[{'label': i, 'value': i} for i in prediction_altered]
+                        ),
+                    ]
+                ),
+                html.Label(
+                    [
+                        'Sex',
+                        dcc.Dropdown(
+                            id='sex-input',
+                            options=[{'label': i, 'value': i} for i in prediction_sex]
+                        ),
+                    ]
+                ),
+                html.Label(
+                    [
+                        'Age (years)',
+                        dcc.Input(
+                            id='age-input',
+                            type='number',
+                            placeholder='Age in Years',
+                            min=0
+                        ),
+                    ]
+                ),
+                html.Label(
+                    [
+                        'Animal',
+                        dcc.Dropdown(
+                            id='animal-input',
+                            options=[{'label': i, 'value': i} for i in prediction_animal_type]
+                        ),
+                    ]
+                ),
+                html.Label(
+                    [
+                        'Color',
+                        dcc.Dropdown(
+                            id='color-input',
+                            options=[{'label': i, 'value': i} for i in prediction_color]
+                        ),
+                    ]
+                ),
+                html.Label(
+                    [
+                        'Month of Outcome',
+                        dcc.Dropdown(
+                            id='month-input',
+                            options=[{'label': i, 'value': i} for i in prediction_month]
+                        ),
+                    ]
+                ),
+                html.Label(
+                    [
+                        'Breed',
+                        dcc.Dropdown(
+                            id='breed-input',
+                            options=[{'label': i, 'value': i} for i in prediction_breed]
+                        ),
+                    ]
+                ),
+                html.Label(
+                    [
+                        'Intake Condition',
+                        dcc.Dropdown(
+                            id='intake-condition-input',
+                            options=[{'label': i, 'value': i} for i in prediction_intake_condition]
+                        ),
+                    ]
+                )
+            ], className='predict_outcome_input'),
+            html.Div([
+                html.Div([
+                    html.Button(id='submit-params', n_clicks=0, children='Predict'),
 
-    dcc.Graph(
-        id='example-graph',
-        figure={
-            'data': [
-                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Montreal'},
-            ],
-            'layout': {
-                'title': 'Dash Data Visualization'
-            }
-        }
-    ),
+                ], className='outcome_button'),
+                html.Div(id='outcome-result', className='result_display')
+            ], className='predict_outcome_result')
+        ], className='predict_outcome')
+    ])
+], className='main')
 
-    html.Div(
-        html.Div(
-            html.H1(children='Predict Outcome'),
-            html.Label(children='Spayed/Neutered/Intact'),
-            dcc.Dropdown(
-                options=[{'label': i, 'value': i} for i in prediction_altered],
-                value=['Intact']
-            ),
-            html.Label(children='Sex'),
-            dcc.Dropdown(
-                options=[{'label': i, 'value': i} for i in prediction_sex],
-                value=['Male']
-            ),
-            html.Label(children='Age (years)'),
-            dcc.Input(
-                type='number',
-                placeholder='age in years'
-            ),
-            html.Label(children="Animal"),
-            dcc.Dropdown(
-                options=[{'label': i, 'value': i} for i in prediction_animal_type],
-                value=['Dog']
-            ),
-            html.Label(children='Color'),
-            dcc.Dropdown(
-                options=[{'label': i, 'value': i} for i in prediction_color]
-            ),
-            html.Label(children='Month'),
-            dcc.Dropdown(
-                options=[
-                    {'label': 1, 'value': 1},
-                    {'label': 2, 'value': 2},
-                    {'label': 3, 'value': 3},
-                    {'label': 4, 'value': 4},
-                    {'label': 5, 'value': 5},
-                    {'label': 6, 'value': 6},
-                    {'label': 7, 'value': 7},
-                    {'label': 8, 'value': 8},
-                    {'label': 9, 'value': 9},
-                    {'label': 10, 'value': 10},
-                    {'label': 11, 'value': 11},
-                    {'label': 12, 'value': 12},
-                ]
-            ),
-            html.Label(children='Breed'),
-            dcc.Dropdown(
-                options=[{'label': i, 'value': i} for i in prediction_breed]
-            ),
-            html.Label(children='Intake Condition'),
-            dcc.Dropdown(
-                options=[{'label': i, 'value': i} for i in prediction_intake_condition]
-            ),
-        )
-    )
-])
+
+# submit inputted information to predict outcome of animal
+@app.callback(Output('outcome-result', 'children'),
+              [Input('submit-params', 'n_clicks')],
+              [State('altered-input', 'value'),
+               State('sex-input', 'value'),
+               State('age-input', 'value'),
+               State('animal-input', 'value'),
+               State('color-input', 'value'),
+               State('month-input', 'value'),
+               State('breed-input', 'value'),
+               State('intake-condition-input', 'value')])
+def return_outcome(n_clicks, input1, input2, input3, input4, input5, input6, input7, input8):
+    if n_clicks == 0:
+        return ''
+    else:
+        return predict_input_outcome(input1, input2, input3, input4, input5, input6, input7, input8)
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

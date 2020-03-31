@@ -65,21 +65,21 @@ rf_classification.fit(X_train, y_train)
 
 
 # feature importance graph
-features = X.columns
-importances = rf_classification.feature_importances_
-indices = np.argsort(importances)
-plt.title('Feature Importances')
-plt.barh(range(len(indices)), importances[indices], align='center')
-plt.yticks(range(len(indices)), [features[i] for i in indices])
-plt.show()
+# features = X.columns
+# importances = rf_classification.feature_importances_
+# indices = np.argsort(importances)
+# plt.title('Feature Importances')
+# plt.barh(range(len(indices)), importances[indices], align='center')
+# plt.yticks(range(len(indices)), [features[i] for i in indices])
+# plt.show()
 
 # test
-y_pred = rf_classification.predict(X_test)
-conf_mat = confusion_matrix(y_test, y_pred)
-sns.heatmap(conf_mat, annot=True)
-plt.show()
-print(classification_report(y_test, y_pred))
-print('Accuracy: ', accuracy_score(y_test, y_pred))
+# y_pred = rf_classification.predict(X_test)
+# conf_mat = confusion_matrix(y_test, y_pred)
+# sns.heatmap(conf_mat, annot=True)
+# plt.show()
+# print(classification_report(y_test, y_pred))
+# print('Accuracy: ', accuracy_score(y_test, y_pred))
 
 def predict_outcome(df):
     outcome = rf_classification.predict(df)
@@ -102,7 +102,7 @@ def predict_input_outcome(altered, sex, age, animal_type, color, month, breed, i
     sex_val = string_map[2].get(sex)
     input_dict['Sex'] = sex_val
 
-    input_dict['Age (years)'] = age
+    input_dict['Age (years)'] = int(age)
 
     animal_type_val = string_map[4].get(animal_type)
     input_dict['Animal Type'] = animal_type_val
@@ -110,7 +110,7 @@ def predict_input_outcome(altered, sex, age, animal_type, color, month, breed, i
     color_val = string_map[5].get(color)
     input_dict['Color'] = color_val
 
-    input_dict['Month'] = month
+    input_dict['Month'] = int(month)
 
     breed_val = string_map[7].get(breed)
     input_dict['Breed'] = breed_val
@@ -123,8 +123,6 @@ def predict_input_outcome(altered, sex, age, animal_type, color, month, breed, i
 
     return predict_outcome(input_df)
 
-print(string_map)
-print(predict_input_outcome('Altered', 'Female', 3, 'Dog', 'Black', 2, 'Dachshund', 'Normal'))
 
 # sc = StandardScaler()
 # X_train = sc.fit_transform(X_train)
