@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
+import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import plotly.express as px
 from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
 
 from src.outcome import string_map, predict_input_outcome
 
 app = dash.Dash(__name__)
 server = app.server
 
+# collect options for dropdowns in outcome prediction
 prediction_altered = list(string_map[1].keys())
 prediction_sex = list(string_map[2].keys())
 prediction_animal_type = list(string_map[4].keys())
@@ -18,9 +20,29 @@ prediction_month = list([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 prediction_breed = list(string_map[7].keys())
 prediction_intake_condition = list(string_map[8].keys())
 
+# adoptions by month/year
+monthly_adoption_data = pd.read_csv('../data/monthly_adoption.csv')
+monthly_adoption_data = monthly_adoption_data[monthly_adoption_data['Outcome'] == 'Adoption']
+monthly_adoption_data = monthly_adoption_data[monthly_adoption_data['Date'] != '2018-04']
+by_date = monthly_adoption_data.groupby('Date')['Outcome'].count()
+x_date = by_date.index
+y_date = by_date.values
+
+
 app.layout = html.Div([
     html.H1('Animal Shelter'),
-
+    html.Div([
+        dcc.Graph(
+            figure={
+                'data': [
+                    {'x': x_date, 'y': y_date, 'type': 'line'}
+                ],
+                'layout': {
+                    'title': 'Adoptions by Month'
+                }
+            }
+        )
+    ]),
     html.Div([
         html.H2('Predict Outcome'),
         html.Div([
