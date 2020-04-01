@@ -7,6 +7,7 @@ import plotly.express as px
 from dash.dependencies import Input, Output, State
 
 from src.outcome import string_map, predict_input_outcome
+from src.time_in_shelter import x_scatter, y_scatter
 
 app = dash.Dash(__name__)
 server = app.server
@@ -28,17 +29,36 @@ by_date = monthly_adoption_data.groupby('Date')['Outcome'].count()
 x_date = by_date.index
 y_date = by_date.values
 
-
 app.layout = html.Div([
     html.H1('Animal Shelter'),
     html.Div([
         dcc.Graph(
             figure={
                 'data': [
-                    {'x': x_date, 'y': y_date, 'type': 'line'}
+                    {'x': x_date,
+                     'y': y_date,
+                     'type': 'line'}
                 ],
                 'layout': {
-                    'title': 'Adoptions by Month'
+                    'title': 'Adoptions by Month',
+                    'xaxis': {'title': 'Date'},
+                    'yaxis': {'title': 'Adoption Count'}
+                }
+            }
+        )
+    ]),
+    html.Div([
+        dcc.Graph(
+            figure={
+                'data': [
+                    {'x': x_scatter,
+                     'y': y_scatter,
+                     'mode': 'markers'}
+                ],
+                'layout': {
+                    'title': 'Time in Shelter by Age',
+                    'xaxis': {'title': 'Age (months)'},
+                    'yaxis': {'title': 'Time in Shelter (months)'}
                 }
             }
         )
