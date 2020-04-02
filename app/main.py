@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import flask
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -10,8 +9,8 @@ from dash.dependencies import Input, Output, State
 from src.outcome import string_map, predict_input_outcome
 from src.time_in_shelter import x_scatter, y_scatter
 
-server = flask.Flask(__name__)
-app = dash.Dash(__name__, server=server)
+app = dash.Dash(__name__)
+server = app.server
 
 # collect options for dropdowns in outcome prediction
 prediction_altered = list(string_map[1].keys())
