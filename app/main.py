@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.express as px
+import pandas as pd
 from dash.dependencies import Input, Output, State
 
 from src.outcome import string_map, predict_input_outcome
@@ -22,7 +21,7 @@ prediction_breed = list(string_map[7].keys())
 prediction_intake_condition = list(string_map[8].keys())
 
 # adoptions by month/year
-monthly_adoption_data = pd.read_csv('../data/monthly_adoption.csv')
+monthly_adoption_data = pd.read_csv('data/monthly_adoption.csv')
 monthly_adoption_data = monthly_adoption_data[monthly_adoption_data['Outcome'] == 'Adoption']
 monthly_adoption_data = monthly_adoption_data[monthly_adoption_data['Date'] != '2018-04']
 by_date = monthly_adoption_data.groupby('Date')['Outcome'].count()
@@ -173,4 +172,4 @@ def return_outcome(n_clicks, input1, input2, input3, input4, input5, input6, inp
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.server.run(debug=True)

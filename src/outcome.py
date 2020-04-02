@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-data = pd.read_csv('../data/outcomes.csv')
+data = pd.read_csv('data/outcomes.csv')
 working_data = data.copy().dropna()
 
 string_map = {}

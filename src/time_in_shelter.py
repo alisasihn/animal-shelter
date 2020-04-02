@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn import preprocessing
 
-tis_data = pd.read_csv('../data/time_in_shelter.csv')
+tis_data = pd.read_csv('data/time_in_shelter.csv')
 
 
 def convert_days(x):
