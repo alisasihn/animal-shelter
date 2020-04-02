@@ -1,1 +1,1 @@
-web: gunicorn animal-shelter:app
+web: gunicorn run_server:app
