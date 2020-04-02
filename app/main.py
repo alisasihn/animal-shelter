@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -9,6 +10,7 @@ from src.outcome import string_map, predict_input_outcome
 from src.time_in_shelter import x_scatter, y_scatter
 
 app = dash.Dash(__name__)
+
 server = app.server
 
 # collect options for dropdowns in outcome prediction
