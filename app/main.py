@@ -34,38 +34,6 @@ app.title = 'Animal Shelter'
 app.layout = html.Div([
     html.H1('Animal Shelter Statistics'),
     html.Div([
-        dcc.Graph(
-            figure={
-                'data': [
-                    {'x': x_date,
-                     'y': y_date,
-                     'type': 'line'}
-                ],
-                'layout': {
-                    'title': 'Adoptions by Month',
-                    'xaxis': {'title': 'Date'},
-                    'yaxis': {'title': 'Adoption Count'}
-                }
-            }
-        )
-    ]),
-    html.Div([
-        dcc.Graph(
-            figure={
-                'data': [
-                    {'x': x_scatter,
-                     'y': y_scatter,
-                     'mode': 'markers'}
-                ],
-                'layout': {
-                    'title': 'Time in Shelter by Age',
-                    'xaxis': {'title': 'Age (months)'},
-                    'yaxis': {'title': 'Time in Shelter (months)'}
-                }
-            }
-        )
-    ]),
-    html.Div([
         html.H2('Predict Outcome'),
         html.Div([
             html.Div([
@@ -152,7 +120,41 @@ app.layout = html.Div([
                 html.Div(id='outcome-result', className='result_display')
             ], className='predict_outcome_result')
         ], className='predict_outcome')
-    ])
+    ]),
+    html.Hr(),
+    html.Div([
+        dcc.Graph(
+            figure={
+                'data': [
+                    {'x': x_date,
+                     'y': y_date,
+                     'type': 'line'}
+                ],
+                'layout': {
+                    'title': 'Adoptions by Month',
+                    'xaxis': {'title': 'Date'},
+                    'yaxis': {'title': 'Adoption Count'}
+                }
+            }
+        )
+    ], className='monthly_adoption'),
+    html.Hr(),
+    html.Div([
+        dcc.Graph(
+            figure={
+                'data': [
+                    {'x': x_scatter,
+                     'y': y_scatter,
+                     'mode': 'markers'}
+                ],
+                'layout': {
+                    'title': 'Time in Shelter by Age',
+                    'xaxis': {'title': 'Age (months)'},
+                    'yaxis': {'title': 'Time in Shelter (months)'}
+                }
+            }
+        )
+    ], className='time_in_shelter')
 ], className='main')
 
 
@@ -175,4 +177,4 @@ def return_outcome(n_clicks, input1, input2, input3, input4, input5, input6, inp
 
 
 if __name__ == '__main__':
-    app.server.run(debug=True)
+    app.server.run(debug=False)

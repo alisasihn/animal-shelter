@@ -1,5 +1,6 @@
 .main {
     margin: 5% 10%;
+    font-family: 'Open Sans', verdana, arial, sans-serif;
 }
 
 .main h1 {
@@ -30,6 +31,8 @@
     height: 36px;
     font-size: 14px;
     width: 100%;
+    font-family: 'Open Sans', verdana, arial, sans-serif;
+
 }
 
 .predict_outcome_result {
@@ -46,6 +49,8 @@
     text-align: center;
     font-size: 1em;
     width: 100%;
+    font-family: 'Open Sans', verdana, arial, sans-serif;
+
 }
 
 .predict_outcome_result .result_display {
