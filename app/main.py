@@ -35,6 +35,7 @@ app.layout = html.Div([
     html.H1('Animal Shelter Statistics'),
     html.Div([
         html.H2('Predict Outcome'),
+        html.P('This will predict the outcome of the animal based on the inputted conditions below. All fields are required.'),
         html.Div([
             html.Div([
                 html.Label(
@@ -136,7 +137,8 @@ app.layout = html.Div([
                     'yaxis': {'title': 'Adoption Count'}
                 }
             }
-        )
+        ),
+        html.P('This graph shows the adoption count over the time that data has been collected. This information can be used for staffing and budgeting for supplies.')
     ], className='monthly_adoption'),
     html.Hr(),
     html.Div([
@@ -153,7 +155,8 @@ app.layout = html.Div([
                     'yaxis': {'title': 'Time in Shelter (months)'}
                 }
             }
-        )
+        ),
+        html.P('This chart shows the relationship between an animal\'s age and its length of stay.')
     ], className='time_in_shelter')
 ], className='main')
 
