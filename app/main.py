@@ -29,8 +29,10 @@ by_date = monthly_adoption_data.groupby('Date')['Outcome'].count()
 x_date = by_date.index
 y_date = by_date.values
 
+app.title = 'Animal Shelter'
+
 app.layout = html.Div([
-    html.H1('Animal Shelter'),
+    html.H1('Animal Shelter Statistics'),
     html.Div([
         dcc.Graph(
             figure={
@@ -69,7 +71,7 @@ app.layout = html.Div([
             html.Div([
                 html.Label(
                     [
-                        'Spayed/Neutered/Intact',
+                        'Spayed/Neutered/Intact *',
                         dcc.Dropdown(
                             id='altered-input',
                             options=[{'label': i, 'value': i} for i in prediction_altered]
@@ -78,7 +80,7 @@ app.layout = html.Div([
                 ),
                 html.Label(
                     [
-                        'Sex',
+                        'Sex *',
                         dcc.Dropdown(
                             id='sex-input',
                             options=[{'label': i, 'value': i} for i in prediction_sex]
@@ -87,7 +89,7 @@ app.layout = html.Div([
                 ),
                 html.Label(
                     [
-                        'Age (years)',
+                        'Age (years) *',
                         dcc.Input(
                             id='age-input',
                             type='number',
@@ -98,7 +100,7 @@ app.layout = html.Div([
                 ),
                 html.Label(
                     [
-                        'Animal',
+                        'Animal *',
                         dcc.Dropdown(
                             id='animal-input',
                             options=[{'label': i, 'value': i} for i in prediction_animal_type]
@@ -107,7 +109,7 @@ app.layout = html.Div([
                 ),
                 html.Label(
                     [
-                        'Color',
+                        'Color *',
                         dcc.Dropdown(
                             id='color-input',
                             options=[{'label': i, 'value': i} for i in prediction_color]
@@ -116,7 +118,7 @@ app.layout = html.Div([
                 ),
                 html.Label(
                     [
-                        'Month of Outcome',
+                        'Month of Outcome *',
                         dcc.Dropdown(
                             id='month-input',
                             options=[{'label': i, 'value': i} for i in prediction_month]
@@ -125,7 +127,7 @@ app.layout = html.Div([
                 ),
                 html.Label(
                     [
-                        'Breed',
+                        'Breed *',
                         dcc.Dropdown(
                             id='breed-input',
                             options=[{'label': i, 'value': i} for i in prediction_breed]
@@ -134,7 +136,7 @@ app.layout = html.Div([
                 ),
                 html.Label(
                     [
-                        'Intake Condition',
+                        'Intake Condition *',
                         dcc.Dropdown(
                             id='intake-condition-input',
                             options=[{'label': i, 'value': i} for i in prediction_intake_condition]
