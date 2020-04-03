@@ -128,50 +128,23 @@ app.layout = html.Div([
         ], className='predict_outcome')
     ]),
     html.Hr(),
-    html.Div([
-        dcc.Loading(id='adoption-graph-loading',
-                    children=[
-                        dcc.Graph(
-                            figure={
-                                'data': [
-                                    {'x': x_date,
-                                     'y': y_date,
-                                     'type': 'line'}
-                                ],
-                                'layout': {
-                                    'title': 'Adoptions by Month',
-                                    'xaxis': {'title': 'Date'},
-                                    'yaxis': {'title': 'Adoption Count'}
-                                }
-                            }
-                        )
-                    ],
-                    type='circle'),
-        html.P(
-            'This graph shows the adoption count over the time that data has been collected. This information can be used for staffing and budgeting for supplies.')
-    ], className='monthly_adoption'),
+    html.Div(
+        className='monthly_adoption',
+        children=[
+            dcc.Loading(id='adoption-graph-loading',
+                        children=[html.Div(id='adoption-graph')],
+                        type='circle')
+        ]),
+    html.P('This graph shows the adoption count over the time that data has been collected. This information can be used for staffing and budgeting for supplies.'),
     html.Hr(),
-    html.Div([
-        dcc.Loading(id='length-stay-loading',
-                    children=[
-                        dcc.Graph(
-                            figure={
-                                'data': [
-                                    {'x': x_scatter,
-                                     'y': y_scatter,
-                                     'mode': 'markers'}
-                                ],
-                                'layout': {
-                                    'title': 'Time in Shelter by Age',
-                                    'xaxis': {'title': 'Age (months)'},
-                                    'yaxis': {'title': 'Time in Shelter (months)'}
-                                }
-                            }
-                        )
-                    ],
-                    type='circle'),
-        html.P('This chart shows the relationship between an animal\'s age and its length of stay.')
-    ], className='time_in_shelter'),
+    html.Div(
+        className='time_in_shelter',
+        children=[
+            dcc.Loading(id='length-stay-loading',
+                        children=[html.Div(id='length-stay-graph')],
+                        type='circle')
+        ]),
+    html.P('This chart shows the relationship between an animal\'s age and its length of stay.'),
     html.Div([
         html.Button(id='callback-button', n_clicks=0)
     ], className='callback_button')
@@ -191,25 +164,51 @@ app.layout = html.Div([
                State('intake-condition-input', 'value')])
 def return_outcome(n_clicks, input1, input2, input3, input4, input5, input6, input7, input8):
     if n_clicks == 0:
-        return ''
+        pass
     else:
         return predict_input_outcome(input1, input2, input3, input4, input5, input6, input7, input8)
 
 
-# loader for outcome prediction result
-@app.callback(Output('adoption-graph-loading', 'children'),
+# loader for adoption graph
+@app.callback(Output('adoption-graph', 'children'),
               [Input('callback-button', 'n_clicks')])
-def adoption_graph(n_clicks, children):
+def adoption_graph(n_clicks):
     if n_clicks == 0:
-        return children
+        return dcc.Graph(
+                            figure={
+                                'data': [
+                                    {'x': x_date,
+                                     'y': y_date,
+                                     'type': 'line'}
+                                ],
+                                'layout': {
+                                    'title': 'Adoptions by Month',
+                                    'xaxis': {'title': 'Date'},
+                                    'yaxis': {'title': 'Adoption Count'}
+                                }
+                            }
+                        )
 
 
-# loader for graphs
-@app.callback(Output('length-stay-loading', 'children'),
+# loader for length of stay graph
+@app.callback(Output('length-stay-graph', 'children'),
               [Input('callback-button', 'n_clicks')])
-def length_stay_graph(n_clicks, children):
+def length_stay_graph(n_clicks):
     if n_clicks == 0:
-        return children
+        return dcc.Graph(
+                            figure={
+                                'data': [
+                                    {'x': x_scatter,
+                                     'y': y_scatter,
+                                     'mode': 'markers'}
+                                ],
+                                'layout': {
+                                    'title': 'Time in Shelter by Age',
+                                    'xaxis': {'title': 'Age (months)'},
+                                    'yaxis': {'title': 'Time in Shelter (months)'}
+                                }
+                            }
+                        )
 
 
 if __name__ == '__main__':
