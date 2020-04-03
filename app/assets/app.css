@@ -61,3 +61,7 @@
 .predict_outcome_result #outcome-result {
     margin-top: 3%;
 }
+
+.callback_button {
+    visibility: hidden;
+}

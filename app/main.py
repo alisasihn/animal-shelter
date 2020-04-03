@@ -171,7 +171,10 @@ app.layout = html.Div([
                     ],
                     type='circle'),
         html.P('This chart shows the relationship between an animal\'s age and its length of stay.')
-    ], className='time_in_shelter')
+    ], className='time_in_shelter'),
+    html.Div([
+        html.Button(id='callback-button', n_clicks=0)
+    ], className='callback_button')
 ], className='main')
 
 
@@ -194,14 +197,14 @@ def return_outcome(n_clicks, input1, input2, input3, input4, input5, input6, inp
 
 
 @app.callback(Output('adoption-graph-loading', 'children'),
-              [Input('submit-params', 'n_clicks')])
+              [Input('callback-button', 'n_clicks')])
 def adoption_graph(n_clicks, children):
     if n_clicks == 0:
         return children
 
 
 @app.callback(Output('length-stay-loading', 'children'),
-              [Input('submit-params', 'n_clicks')])
+              [Input('callback-button', 'n_clicks')])
 def length_stay_graph(n_clicks, children):
     if n_clicks == 0:
         return children
