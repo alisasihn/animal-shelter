@@ -81,6 +81,8 @@ rf_classification.fit(X_train, y_train)
 # print(classification_report(y_test, y_pred))
 # print('Accuracy: ', accuracy_score(y_test, y_pred))
 
+
+# return outcome of animal based on inputted conditions
 def predict_outcome(df):
     outcome = rf_classification.predict(df)
     outcome = outcome[0]
@@ -90,6 +92,7 @@ def predict_outcome(df):
     return outcome_value
 
 
+# modify inputted data to be accepted by predict_outcome function
 def predict_input_outcome(altered, sex, age, animal_type, color, month, breed, intake_condition):
     # create input dictionary to hold the input data
     input_dict = {'Altered/Intact': [], 'Sex': [], 'Age (years)': [], 'Animal Type': [], 'Color': [], 'Month': [],

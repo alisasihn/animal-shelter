@@ -196,6 +196,7 @@ def return_outcome(n_clicks, input1, input2, input3, input4, input5, input6, inp
         return predict_input_outcome(input1, input2, input3, input4, input5, input6, input7, input8)
 
 
+# loader for outcome prediction result
 @app.callback(Output('adoption-graph-loading', 'children'),
               [Input('callback-button', 'n_clicks')])
 def adoption_graph(n_clicks, children):
@@ -203,6 +204,7 @@ def adoption_graph(n_clicks, children):
         return children
 
 
+# loader for graphs
 @app.callback(Output('length-stay-loading', 'children'),
               [Input('callback-button', 'n_clicks')])
 def length_stay_graph(n_clicks, children):

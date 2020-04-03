@@ -39,5 +39,6 @@ cluster['cluster_pred'] = kmeans.fit_predict(processed_data)
 # # plt.ylabel('Time in Shelter (months)')
 # # plt.show()
 
+# x and y axis data for graph in main.py
 x_scatter = cluster['age_upon_outcome_(days)']
 y_scatter = cluster['time_in_shelter_days']
