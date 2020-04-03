@@ -35,7 +35,8 @@ app.layout = html.Div([
     html.H1('Animal Shelter Statistics'),
     html.Div([
         html.H2('Predict Outcome'),
-        html.P('This will predict the outcome of the animal based on the inputted conditions below. All fields are required.'),
+        html.P(
+            'This will predict the outcome of the animal based on the inputted conditions below. All fields are required.'),
         html.Div([
             html.Div([
                 html.Label(
@@ -116,46 +117,59 @@ app.layout = html.Div([
             html.Div([
                 html.Div([
                     html.Button(id='submit-params', n_clicks=0, children='Predict'),
-
                 ], className='outcome_button'),
-                html.Div(id='outcome-result', className='result_display')
+                html.Div([
+                    dcc.Loading(id='outcome-loading',
+                                children=[html.Div(id='outcome-result')],
+                                type='circle')
+
+                ])
             ], className='predict_outcome_result')
         ], className='predict_outcome')
     ]),
     html.Hr(),
     html.Div([
-        dcc.Graph(
-            figure={
-                'data': [
-                    {'x': x_date,
-                     'y': y_date,
-                     'type': 'line'}
-                ],
-                'layout': {
-                    'title': 'Adoptions by Month',
-                    'xaxis': {'title': 'Date'},
-                    'yaxis': {'title': 'Adoption Count'}
-                }
-            }
-        ),
-        html.P('This graph shows the adoption count over the time that data has been collected. This information can be used for staffing and budgeting for supplies.')
+        dcc.Loading(id='adoption-graph-loading',
+                    children=[
+                        dcc.Graph(
+                            figure={
+                                'data': [
+                                    {'x': x_date,
+                                     'y': y_date,
+                                     'type': 'line'}
+                                ],
+                                'layout': {
+                                    'title': 'Adoptions by Month',
+                                    'xaxis': {'title': 'Date'},
+                                    'yaxis': {'title': 'Adoption Count'}
+                                }
+                            }
+                        )
+                    ],
+                    type='circle'),
+        html.P(
+            'This graph shows the adoption count over the time that data has been collected. This information can be used for staffing and budgeting for supplies.')
     ], className='monthly_adoption'),
     html.Hr(),
     html.Div([
-        dcc.Graph(
-            figure={
-                'data': [
-                    {'x': x_scatter,
-                     'y': y_scatter,
-                     'mode': 'markers'}
-                ],
-                'layout': {
-                    'title': 'Time in Shelter by Age',
-                    'xaxis': {'title': 'Age (months)'},
-                    'yaxis': {'title': 'Time in Shelter (months)'}
-                }
-            }
-        ),
+        dcc.Loading(id='length-stay-loading',
+                    children=[
+                        dcc.Graph(
+                            figure={
+                                'data': [
+                                    {'x': x_scatter,
+                                     'y': y_scatter,
+                                     'mode': 'markers'}
+                                ],
+                                'layout': {
+                                    'title': 'Time in Shelter by Age',
+                                    'xaxis': {'title': 'Age (months)'},
+                                    'yaxis': {'title': 'Time in Shelter (months)'}
+                                }
+                            }
+                        )
+                    ],
+                    type='circle'),
         html.P('This chart shows the relationship between an animal\'s age and its length of stay.')
     ], className='time_in_shelter')
 ], className='main')
@@ -177,6 +191,20 @@ def return_outcome(n_clicks, input1, input2, input3, input4, input5, input6, inp
         return ''
     else:
         return predict_input_outcome(input1, input2, input3, input4, input5, input6, input7, input8)
+
+
+@app.callback(Output('adoption-graph-loading', 'children'),
+              [Input('submit-params', 'n_clicks')])
+def adoption_graph(n_clicks, children):
+    if n_clicks == 0:
+        return children
+
+
+@app.callback(Output('length-stay-loading', 'children'),
+              [Input('submit-params', 'n_clicks')])
+def length_stay_graph(n_clicks, children):
+    if n_clicks == 0:
+        return children
 
 
 if __name__ == '__main__':

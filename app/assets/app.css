@@ -55,9 +55,9 @@
     font-size: 1em;
     width: 100%;
     font-family: 'Open Sans', verdana, arial, sans-serif;
-
+    margin-bottom: 3%;
 }
 
-.predict_outcome_result .result_display {
-    padding: 5%;
+.predict_outcome_result #outcome-result {
+    margin-top: 3%;
 }
