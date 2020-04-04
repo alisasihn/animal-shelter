@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import os
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas as pd
 from dash.dependencies import Input, Output, State
 
+from src.monthly_trends import x_monthly_adoption, y_monthly_adoption, x_monthly_intake, y_monthly_intake
 from src.outcome import string_map, predict_input_outcome
 from src.time_in_shelter import x_scatter, y_scatter
 
@@ -21,13 +20,6 @@ prediction_month = list([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 prediction_breed = list(string_map[7].keys())
 prediction_intake_condition = list(string_map[8].keys())
 
-# adoptions by month/year
-monthly_adoption_data = pd.read_csv('data/monthly_adoption.csv')
-monthly_adoption_data = monthly_adoption_data[monthly_adoption_data['Outcome'] == 'Adoption']
-monthly_adoption_data = monthly_adoption_data[monthly_adoption_data['Date'] != '2018-04']
-by_date = monthly_adoption_data.groupby('Date')['Outcome'].count()
-x_date = by_date.index
-y_date = by_date.values
 
 app.title = 'Animal Shelter'
 
@@ -129,13 +121,26 @@ app.layout = html.Div([
     ]),
     html.Hr(),
     html.Div(
-        className='monthly_adoption',
         children=[
-            dcc.Loading(id='adoption-graph-loading',
-                        children=[html.Div(id='adoption-graph')],
-                        type='circle')
-        ]),
+            dcc.Loading(
+                id='adoption-graph-loading',
+                children=[html.Div(id='adoption-graph')],
+                type='circle'
+            )
+        ]
+    ),
     html.P('This graph shows the adoption count over the time that data has been collected. This information can be used for staffing and budgeting for supplies.'),
+    html.Hr(),
+    html.Div(
+        children=[
+            dcc.Loading(
+                id='intake-graph-loading',
+                children=[html.Div(id='intake-graph')],
+                type='circle'
+            )
+        ]
+    ),
+    html.P('This graph shows the intake count over the time that data has been collected. This information can be used for staffing and budgeting for supplies.'),
     html.Hr(),
     html.Div(
         className='time_in_shelter',
@@ -177,14 +182,35 @@ def adoption_graph(n_clicks):
         return dcc.Graph(
                             figure={
                                 'data': [
-                                    {'x': x_date,
-                                     'y': y_date,
+                                    {'x': x_monthly_adoption,
+                                     'y': y_monthly_adoption,
                                      'type': 'line'}
                                 ],
                                 'layout': {
                                     'title': 'Adoptions by Month',
                                     'xaxis': {'title': 'Date'},
                                     'yaxis': {'title': 'Adoption Count'}
+                                }
+                            }
+                        )
+
+
+# loader for intake graph
+@app.callback(Output('intake-graph', 'children'),
+              [Input('callback-button', 'n_clicks')])
+def adoption_graph(n_clicks):
+    if n_clicks == 0:
+        return dcc.Graph(
+                            figure={
+                                'data': [
+                                    {'x': x_monthly_intake,
+                                     'y': y_monthly_intake,
+                                     'type': 'line'}
+                                ],
+                                'layout': {
+                                    'title': 'Intake by Month',
+                                    'xaxis': {'title': 'Date'},
+                                    'yaxis': {'title': 'Intake Count'}
                                 }
                             }
                         )
