@@ -1,11 +1,10 @@
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import seaborn as sns
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, mean_absolute_error, \
-    mean_squared_error
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.model_selection import train_test_split, validation_curve
 from sklearn.preprocessing import StandardScaler
 
 data = pd.read_csv('data/outcomes.csv')
@@ -53,16 +52,21 @@ X = (working_data.drop(['outcome_type'], axis=1))
 y = working_data['outcome_type']
 
 # split data for training and testing
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
 
 # random forest classifier
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-rf_classification = RandomForestClassifier(n_estimators=200)
+rf_classification = RandomForestClassifier(n_estimators=750,
+                                           max_depth=50,
+                                           min_samples_split=15,
+                                           min_samples_leaf=10,
+                                           n_jobs=-1,
+                                           oob_score=True)
 rf_classification.fit(X_train, y_train)
-
 
 # feature importance graph
 # features = X.columns
@@ -74,12 +78,12 @@ rf_classification.fit(X_train, y_train)
 # plt.show()
 
 # test
-# y_pred = rf_classification.predict(X_test)
-# conf_mat = confusion_matrix(y_test, y_pred)
-# sns.heatmap(conf_mat, annot=True)
-# plt.show()
-# print(classification_report(y_test, y_pred))
-# print('Accuracy: ', accuracy_score(y_test, y_pred))
+y_pred = rf_classification.predict(X_test)
+conf_mat = confusion_matrix(y_test, y_pred)
+sns.heatmap(conf_mat, annot=True)
+plt.show()
+print(classification_report(y_test, y_pred))
+print('Accuracy: ', accuracy_score(y_test, y_pred))
 
 
 # return outcome of animal based on inputted conditions
@@ -125,15 +129,3 @@ def predict_input_outcome(altered, sex, age, animal_type, color, month, breed, i
     input_df = pd.DataFrame(data=input_dict, index=[0])
 
     return predict_outcome(input_df)
-
-
-# sc = StandardScaler()
-# X_train = sc.fit_transform(X_train)
-# X_test = sc.transform(X_test)
-# reg = RandomForestRegressor(n_estimators=200, random_state=0)
-# reg.fit(X_train, y_train)
-# y_pred = reg.predict(X_test)
-
-# print('MAE:', mean_absolute_error(y_test, y_pred))
-# print('MSE:', mean_squared_error(y_test, y_pred))
-# print('RMSE:', np.sqrt(mean_squared_error(y_test, y_pred)))
