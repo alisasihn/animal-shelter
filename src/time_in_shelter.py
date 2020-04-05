@@ -16,6 +16,16 @@ tis_data['age_upon_outcome_(days)'] = tis_data['age_upon_outcome_(days)'].apply(
 
 processed_data = preprocessing.scale(tis_data)
 
+kmeans = KMeans(n_clusters=1)
+kmeans.fit(processed_data)
+
+cluster = tis_data.copy()
+cluster['cluster_pred'] = kmeans.fit_predict(processed_data)
+
+# x and y axis data for graph in main.py
+x_scatter = cluster['age_upon_outcome_(days)']
+y_scatter = cluster['time_in_shelter_days']
+
 # find number of clusters with elbow graph
 # score = []
 # for i in range(1, 20):
@@ -28,17 +38,7 @@ processed_data = preprocessing.scale(tis_data)
 # plt.ylabel('Score')
 # plt.show()
 
-kmeans = KMeans(n_clusters=1)
-kmeans.fit(processed_data)
-
-cluster = tis_data.copy()
-cluster['cluster_pred'] = kmeans.fit_predict(processed_data)
-
 # plt.scatter(cluster['age_upon_outcome_(days)'], cluster['time_in_shelter_days'], c=cluster['cluster_pred'])
-# # plt.xlabel('Age (months)')
-# # plt.ylabel('Time in Shelter (months)')
-# # plt.show()
-
-# x and y axis data for graph in main.py
-x_scatter = cluster['age_upon_outcome_(days)']
-y_scatter = cluster['time_in_shelter_days']
+# plt.xlabel('Age (months)')
+# plt.ylabel('Time in Shelter (months)')
+# plt.show()

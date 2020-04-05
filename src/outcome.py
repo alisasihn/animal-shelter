@@ -69,13 +69,13 @@ rf_classification = RandomForestClassifier(n_estimators=750,
 rf_classification.fit(X_train, y_train)
 
 # feature importance graph
-# features = X.columns
-# importances = rf_classification.feature_importances_
-# indices = np.argsort(importances)
-# plt.title('Feature Importances')
-# plt.barh(range(len(indices)), importances[indices], align='center')
-# plt.yticks(range(len(indices)), [features[i] for i in indices])
-# plt.show()
+features = X.columns
+importances = rf_classification.feature_importances_
+indices = np.argsort(importances)
+plt.title('Feature Importances')
+plt.barh(range(len(indices)), importances[indices], align='center')
+plt.yticks(range(len(indices)), [features[i] for i in indices])
+plt.show()
 
 # test
 y_pred = rf_classification.predict(X_test)
